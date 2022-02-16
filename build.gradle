@@ -13,15 +13,13 @@ buildscript {
     ext.coil_version = "1.0.0"
     ext.gson_version = "2.8.6"
     ext.shimmer_version = "0.5.0"
-    ext.shimmer_recyclerview_version = "0.4.1"
     ext.json_version = "1.13.1"
     ext.viewpager2_version = "1.0.0"
     ext.recyclerview_version = "1.2.1"
 
-    repositories {
-        google()
-    }
+
     dependencies {
+
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 

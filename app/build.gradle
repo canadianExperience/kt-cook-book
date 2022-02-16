@@ -97,7 +97,6 @@ dependencies {
 
     //Shimmer
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
-   // implementation "com.todkars:shimmer-recyclerview:$shimmer_recyclerview_version"
 
     //Jsoup
     implementation "org.jsoup:jsoup:$json_version"

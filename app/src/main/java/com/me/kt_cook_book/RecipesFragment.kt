@@ -13,6 +13,8 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
 
         val binding = FragmentRecipesBinding.bind(view)
         fragmentBinding = binding
+
+       // binding.recyclerview.sh
     }
 
     override fun onDestroy() {
