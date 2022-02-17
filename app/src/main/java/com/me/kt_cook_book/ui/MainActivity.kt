@@ -1,13 +1,13 @@
-package com.me.kt_cook_book
+package com.me.kt_cook_book.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.me.kt_cook_book.R
 import com.me.kt_cook_book.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

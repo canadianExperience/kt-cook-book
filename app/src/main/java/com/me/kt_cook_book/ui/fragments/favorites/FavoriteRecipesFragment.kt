@@ -1,8 +1,9 @@
-package com.me.kt_cook_book
+package com.me.kt_cook_book.ui.fragments.favorites
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import com.me.kt_cook_book.R
 import com.me.kt_cook_book.databinding.FragmentFavoriteRecipesBinding
 
 class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes) {

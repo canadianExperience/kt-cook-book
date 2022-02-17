@@ -6,17 +6,17 @@
     app:startDestination="@id/recipesFragment">
     <fragment
         android:id="@+id/recipesFragment"
-        android:name="com.me.kt_cook_book.RecipesFragment"
+        android:name="com.me.kt_cook_book.ui.fragments.recipes.RecipesFragment"
         android:label="Recipes"
         tools:layout="@layout/fragment_recipes" />
     <fragment
         android:id="@+id/favoriteRecipesFragment"
-        android:name="com.me.kt_cook_book.FavoriteRecipesFragment"
+        android:name="com.me.kt_cook_book.ui.fragments.favorites.FavoriteRecipesFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_favorite_recipes" />
     <fragment
         android:id="@+id/foodJokeFragment"
-        android:name="com.me.kt_cook_book.FoodJokeFragment"
+        android:name="com.me.kt_cook_book.ui.fragments.foodjoke.FoodJokeFragment"
         android:label="Food Joke"
         tools:layout="@layout/fragment_food_joke" />
 </navigation>

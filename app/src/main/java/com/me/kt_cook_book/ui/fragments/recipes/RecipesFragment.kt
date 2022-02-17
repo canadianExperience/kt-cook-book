@@ -1,8 +1,9 @@
-package com.me.kt_cook_book
+package com.me.kt_cook_book.ui.fragments.recipes
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import com.me.kt_cook_book.R
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
 
 class RecipesFragment : Fragment(R.layout.fragment_recipes) {
