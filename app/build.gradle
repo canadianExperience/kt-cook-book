@@ -17,6 +17,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Please ensure you have a valid API KEY for themoviedb.org to use this app
+        // A valid key will need to be entered
+        Properties properties = new Properties()
+        if (project.rootProject.file('local.properties').canRead()) {
+            properties.load(project.rootProject.file("local.properties").newDataInputStream())
+        }
+        buildConfigField "String", "SPOONACULAR_API_KEY", properties.getProperty('SPOONACULAR_API_KEY', '"???"')
     }
 
     buildTypes {
