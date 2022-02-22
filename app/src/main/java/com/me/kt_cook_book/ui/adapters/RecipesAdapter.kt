@@ -1,4 +1,4 @@
-package com.me.kt_cook_book.adapters
+package com.me.kt_cook_book.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 import com.me.kt_cook_book.databinding.RecipesRowLayoutBinding
-import com.me.kt_cook_book.models.FoodRecipe
-import com.me.kt_cook_book.models.Result
+import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
+import com.me.kt_cook_book.data.apimanager.models.Result
 
 class RecipesAdapter: RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 

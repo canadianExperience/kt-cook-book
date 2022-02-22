@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object NetworkModule {
     @Singleton
     @Provides
     fun provideHttpClient() : OkHttpClient{
@@ -51,12 +51,4 @@ object AppModule {
     fun provideApiService(retrofit: Retrofit): FoodRecipesApi{
         return retrofit.create(FoodRecipesApi::class.java)
     }
-
-    @Singleton
-    @Provides
-    fun provideConnectivityManager(@ApplicationContext context: Context) = context.getSystemService(
-        Context.CONNECTIVITY_SERVICE
-    ) as ConnectivityManager
-
-
 }

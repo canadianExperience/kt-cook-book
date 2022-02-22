@@ -1,6 +1,7 @@
 package com.me.kt_cook_book.ui.fragments.recipes
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
@@ -8,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.me.kt_cook_book.R
-import com.me.kt_cook_book.adapters.RecipesAdapter
+import com.me.kt_cook_book.ui.adapters.RecipesAdapter
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
-import com.me.kt_cook_book.ui.MainViewModel
-import com.me.kt_cook_book.utility.Constants.Companion.API_KEY
-import com.me.kt_cook_book.utility.NetworkResult
+import com.me.kt_cook_book.viewmodels.MainViewModel
+import com.me.kt_cook_book.data.apimanager.NetworkResult
+import com.me.kt_cook_book.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +21,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     private var fragmentBinding: FragmentRecipesBinding? = null
     private val recipesAdapter by lazy { RecipesAdapter() }
     private val mainViewModel by viewModels<MainViewModel>()
+    private val recipesViewModel by viewModels<RecipesViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,7 +30,19 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         fragmentBinding = binding
 
         setupRecyclerView(binding.recyclerview)
-        requireApiData()
+        readDatabase()
+    }
+
+    private fun showShimmerEffect() {
+        fragmentBinding?.shimmer?.startShimmer()
+        fragmentBinding?.shimmer?.visibility = View.VISIBLE
+        fragmentBinding?.recyclerview?.visibility = View.GONE
+    }
+
+    private fun hideShimmerEffect() {
+        fragmentBinding?.shimmer?.stopShimmer()
+        fragmentBinding?.shimmer?.visibility = View.GONE
+        fragmentBinding?.recyclerview?.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView(recyclerview: RecyclerView) {
@@ -36,18 +50,34 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
             adapter = recipesAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        showShimmerEffect()
     }
 
-    private fun requireApiData(){
-        mainViewModel.getRecipes(applyQueries())
+    private fun readDatabase(){
+        mainViewModel.readRecipes.observe(viewLifecycleOwner){databaseList ->
+            if(databaseList.isNotEmpty()){
+                Log.d("RecipesFragment", "requestApiData called")
+                recipesAdapter.setData(databaseList[0].foodRecipe)
+                hideShimmerEffect()
+            } else {
+                requestApiData()
+            }
+        }
+    }
+
+    private fun requestApiData(){
+        Log.d("RecipesFragment", "requestApiData called")
+
+        mainViewModel.getRecipes(recipesViewModel.applyQueries())
         mainViewModel.recipesResponse.observe(viewLifecycleOwner){response ->
             when(response){
                 is NetworkResult.Success -> {
-                    //Hide shimmer
+                    hideShimmerEffect()
                     response.data?.let { recipesAdapter.setData(it) }
                 }
                 is NetworkResult.Error -> {
-                    //Hide shimmer
+                    hideShimmerEffect()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -55,22 +85,10 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                     ).show()
                 }
                 is NetworkResult.Loading -> {
-                    //Show shimmer
+                    showShimmerEffect()
                 }
             }
         }
-    }
-
-    private fun applyQueries(): HashMap<String,String>{
-        val queries = hashMapOf<String,String>()
-        queries["number"] = "1"
-        queries["apiKey"] = API_KEY
-        queries["type"] = "drink"
-        queries["diet"] = "vegan"
-        queries["addRecipeInformation"] = "true"
-        queries["fillIngredients"] = "true"
-
-        return queries
     }
 
     override fun onDestroy() {

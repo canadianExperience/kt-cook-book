@@ -1,7 +1,7 @@
 package com.me.kt_cook_book.data
 
 import com.me.kt_cook_book.data.apimanager.FoodRecipesApi
-import com.me.kt_cook_book.models.FoodRecipe
+import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import retrofit2.Response
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.me.kt_cook_book.utility
+package com.me.kt_cook_book.data.apimanager
 
 sealed class NetworkResult<T>(
     val data: T? = null,
