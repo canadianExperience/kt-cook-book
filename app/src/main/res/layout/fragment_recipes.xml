@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+        <import type="com.me.kt_cook_book.data.apimanager.NetworkResult" />
+        <variable
+            name="mainViewModel"
+            type="com.me.kt_cook_book.viewmodels.MainViewModel" />
 
     </data>
 
@@ -13,36 +18,37 @@
         android:background="@color/lightGray"
         tools:context=".ui.fragments.recipes.RecipesFragment">
 
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/internet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+
+        <ImageView
+            android:id="@+id/error_imageView"
+            readApiResponse="@{mainViewModel.recipesResponseLiveData}"
+            readDatabase="@{mainViewModel.readRecipes}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:alpha="0.5"
-            android:gravity="center"
-            android:orientation="vertical"
+            android:src="@drawable/ic_sad"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/error_imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ic_sad" />
+        <TextView
+            android:id="@+id/textView"
+            readApiResponse2="@{mainViewModel.recipesResponseLiveData}"
+            readDatabase2="@{mainViewModel.readRecipes}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:alpha="0.5"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_imageView" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="No Internet Connection"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"

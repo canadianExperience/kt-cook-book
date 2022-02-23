@@ -34,9 +34,12 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentRecipesBinding.bind(view)
+        binding.mainViewModel = mainViewModel
+        binding.lifecycleOwner = this
 
         setupRecyclerView(binding.recyclerview)
         readDatabase()
+        apiResponse()
 
         getRecipesEvents()
     }
@@ -45,26 +48,8 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         mainViewModel.recipesEvent.collect { event->
             when(event){
                 is MainViewModel.RecipesEvent.ApiCallResponse -> {
-                    event.response?.let { onApiResponse(it) }
                 }
             }.exhaustive
-        }
-    }
-
-    private fun onApiResponse(response: NetworkResult<FoodRecipe>) = when (response) {
-        is NetworkResult.Success -> {
-            hideShimmerEffect()
-        }
-        is NetworkResult.Error -> {
-            hideShimmerEffect()
-            Toast.makeText(
-                requireContext(),
-                response.message.toString(),
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        is NetworkResult.Loading -> {
-            showShimmerEffect()
         }
     }
 
@@ -98,6 +83,25 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 Log.d("RecipesFragment", "requestApiData called")
                 mainViewModel.onRequestApiData(recipesViewModel.applyQueries())
             }
+    }
+
+    private fun apiResponse() = mainViewModel.recipesResponseLiveData.observe(viewLifecycleOwner){ response ->
+        when (response) {
+            is NetworkResult.Success -> {
+                hideShimmerEffect()
+            }
+            is NetworkResult.Error -> {
+                hideShimmerEffect()
+                Toast.makeText(
+                    requireContext(),
+                    response.message.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            is NetworkResult.Loading -> {
+                showShimmerEffect()
+            }
+        }
     }
 
     override fun onDestroy() {

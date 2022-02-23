@@ -27,7 +27,8 @@ class MainViewModel @Inject constructor(
 
     /** ROOM DATABASE*/
 
-    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData()
+    private val readRecipesFlow = repository.local.readDatabase()
+    val readRecipes: LiveData<List<RecipesEntity>> get() = readRecipesFlow.asLiveData()
 
     private suspend fun insertRecipes(recipesEntity: RecipesEntity) = repository.local.insertRecipes(recipesEntity)
 
@@ -35,31 +36,32 @@ class MainViewModel @Inject constructor(
 
     /** RETROFIT*/
 
-    var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
-   // val recipesResponseLiveData: LiveData<NetworkResult<FoodRecipe>> get() = recipesResponse
+    private var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    val recipesResponseLiveData: LiveData<NetworkResult<FoodRecipe>> get() = recipesResponse
 
     fun getRecipes(queries: Map<String,String>) = viewModelScope.launch {
         getRecipesSaveCall(queries)
     }
 
     private suspend fun getRecipesSaveCall(queries: Map<String,String>) {
-        recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Loading()))
+        recipesResponse.postValue(NetworkResult.Loading())
         if(hasInternetConnection()){
             try {
                 val response = repository.remote.getRecipes(queries)
 
                 val foodRecipe = handleFoodRecipesResponse(response)
-                foodRecipe?.data?.let {
-                    //Insert to local database (local cache)
-                    insertRecipes(RecipesEntity(it))
+                foodRecipe?.let {
+                    recipesResponse.postValue(it)
+                    it.data?.let { data->
+                        //Insert to local database (local cache)
+                        insertRecipes(RecipesEntity(data))
+                    }
                 }
-                recipesEventChannel.send(RecipesEvent.ApiCallResponse(foodRecipe))
-
             } catch (e: Exception){
-                recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Error("Recipes Not Found")))
+                recipesResponse.postValue(NetworkResult.Error("Recipes Not Found"))
             }
         } else{
-            recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Error("No Internet Connection")))
+            recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
     }
 
