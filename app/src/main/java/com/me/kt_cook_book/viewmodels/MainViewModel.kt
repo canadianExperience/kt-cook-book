@@ -9,10 +9,8 @@ import com.me.kt_cook_book.data.apimanager.NetworkResult
 import com.me.kt_cook_book.data.database.RecipesEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Exception
@@ -23,46 +21,46 @@ class MainViewModel @Inject constructor(
     private val repository: Repository,
     private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
+
+    private val recipesEventChannel = Channel<RecipesEvent>()
+    val recipesEvent = recipesEventChannel.receiveAsFlow()
+
     /** ROOM DATABASE*/
 
     val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readDatabase().asLiveData()
 
-    private fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch(IO) {
-        repository.local.insertRecipes(recipesEntity)
-    }
+    private suspend fun insertRecipes(recipesEntity: RecipesEntity) = repository.local.insertRecipes(recipesEntity)
+
 
 
     /** RETROFIT*/
 
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+   // val recipesResponseLiveData: LiveData<NetworkResult<FoodRecipe>> get() = recipesResponse
 
     fun getRecipes(queries: Map<String,String>) = viewModelScope.launch {
         getRecipesSaveCall(queries)
     }
 
     private suspend fun getRecipesSaveCall(queries: Map<String,String>) {
-        recipesResponse.value = NetworkResult.Loading()
+        recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Loading()))
         if(hasInternetConnection()){
             try {
                 val response = repository.remote.getRecipes(queries)
-                recipesResponse.value = handleFoodRecipesResponse(response)
 
-                val foodRecipe = recipesResponse.value?.data
-                foodRecipe?.let{
-                    offlineCacheRecipes(foodRecipe)
+                val foodRecipe = handleFoodRecipesResponse(response)
+                foodRecipe?.data?.let {
+                    //Insert to local database (local cache)
+                    insertRecipes(RecipesEntity(it))
                 }
+                recipesEventChannel.send(RecipesEvent.ApiCallResponse(foodRecipe))
 
             } catch (e: Exception){
-                recipesResponse.value = NetworkResult.Error("Recipes Not Found")
+                recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Error("Recipes Not Found")))
             }
         } else{
-            recipesResponse.value = NetworkResult.Error("No Internet Connection")
+            recipesEventChannel.send(RecipesEvent.ApiCallResponse(NetworkResult.Error("No Internet Connection")))
         }
-    }
-
-    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
-        val recipesEntity = RecipesEntity(foodRecipe)
-        insertRecipes((recipesEntity))
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>?{
@@ -83,7 +81,6 @@ class MainViewModel @Inject constructor(
             else -> {
                 return NetworkResult.Error(response.message())
             }
-
         }
     }
 
@@ -96,5 +93,13 @@ class MainViewModel @Inject constructor(
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+
+    fun onRequestApiData(query: HashMap<String,String>) = viewModelScope.launch {
+        getRecipesSaveCall(query)
+    }
+
+    sealed class RecipesEvent{
+        class ApiCallResponse(val response: NetworkResult<FoodRecipe>?) : RecipesEvent()
     }
 }
