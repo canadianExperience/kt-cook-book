@@ -9,6 +9,9 @@
         <variable
             name="mainViewModel"
             type="com.me.kt_cook_book.viewmodels.MainViewModel" />
+        <variable
+            name="recipesViewModel"
+            type="com.me.kt_cook_book.viewmodels.RecipesViewModel" />
 
     </data>
 
@@ -90,6 +93,7 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:onClick="@{() -> recipesViewModel.onRecipesBottomSheetClick}"
             android:id="@+id/recipes_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

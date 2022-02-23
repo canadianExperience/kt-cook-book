@@ -1,6 +1,7 @@
 package com.me.kt_cook_book.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.me.kt_cook_book.utility.Constants.Companion.API_KEY
 import com.me.kt_cook_book.utility.Constants.Companion.QUERY_ADD_RECIPE_INFORMATION
 import com.me.kt_cook_book.utility.Constants.Companion.QUERY_API_KEY
@@ -8,14 +9,14 @@ import com.me.kt_cook_book.utility.Constants.Companion.QUERY_DIET
 import com.me.kt_cook_book.utility.Constants.Companion.QUERY_FILL_INGREDIENTS
 import com.me.kt_cook_book.utility.Constants.Companion.QUERY_NUMBER
 import com.me.kt_cook_book.utility.Constants.Companion.QUERY_TYPE
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class RecipesViewModel: ViewModel() {
-//        number=50
-//        apiKey=b57088d18bed41c9824cd5bb87184a83
-//        type=snack
-//        diet=vegan
-//        addRecipeInformation=true
-//        fillIngredients=true
+
+    private val recipesEventChannel = Channel<RecipesEvent>()
+    val recipesEvent = recipesEventChannel.receiveAsFlow()
 
 
     fun applyQueries(): HashMap<String,String>{
@@ -28,5 +29,13 @@ class RecipesViewModel: ViewModel() {
         queries[QUERY_FILL_INGREDIENTS] = "true"
 
         return queries
+    }
+
+    fun onRecipesBottomSheetClick() = viewModelScope.launch {
+        recipesEventChannel.send(RecipesEvent.NavigateToRecipesBottomSheet)
+    }
+
+    sealed class RecipesEvent{
+        object NavigateToRecipesBottomSheet : RecipesEvent()
     }
 }

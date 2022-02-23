@@ -22,9 +22,6 @@ class MainViewModel @Inject constructor(
     private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
-    private val recipesEventChannel = Channel<RecipesEvent>()
-    val recipesEvent = recipesEventChannel.receiveAsFlow()
-
     /** ROOM DATABASE*/
 
     private val readRecipesFlow = repository.local.readDatabase()
@@ -99,9 +96,5 @@ class MainViewModel @Inject constructor(
 
     fun onRequestApiData(query: HashMap<String,String>) = viewModelScope.launch {
         getRecipesSaveCall(query)
-    }
-
-    sealed class RecipesEvent{
-        class ApiCallResponse(val response: NetworkResult<FoodRecipe>?) : RecipesEvent()
     }
 }

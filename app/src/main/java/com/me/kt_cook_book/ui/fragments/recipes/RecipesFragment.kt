@@ -12,14 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.me.kt_cook_book.R
 import com.me.kt_cook_book.data.apimanager.NetworkResult
-import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
 import com.me.kt_cook_book.ui.adapters.RecipesAdapter
 import com.me.kt_cook_book.utility.exhaustive
 import com.me.kt_cook_book.viewmodels.MainViewModel
 import com.me.kt_cook_book.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,6 +33,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
 
         _binding = FragmentRecipesBinding.bind(view)
         binding.mainViewModel = mainViewModel
+        binding.recipesViewModel = recipesViewModel
         binding.lifecycleOwner = this
 
         setupRecyclerView(binding.recyclerview)
@@ -42,15 +41,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         apiResponse()
 
         getRecipesEvents()
-    }
-
-    private fun getRecipesEvents() = lifecycleScope.launch {
-        mainViewModel.recipesEvent.collect { event->
-            when(event){
-                is MainViewModel.RecipesEvent.ApiCallResponse -> {
-                }
-            }.exhaustive
-        }
     }
 
     private fun showShimmerEffect() {
@@ -102,6 +92,21 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 showShimmerEffect()
             }
         }
+    }
+
+    private fun getRecipesEvents() = lifecycleScope.launch {
+        recipesViewModel.recipesEvent.collect { event->
+            when(event){
+                RecipesViewModel.RecipesEvent.NavigateToRecipesBottomSheet -> {
+                    goToRecipesBottomSheet()
+                }
+            }.exhaustive
+        }
+    }
+
+    private fun goToRecipesBottomSheet(){
+        val action = RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet()
+        findNavController().navigate(action)
     }
 
     override fun onDestroy() {
