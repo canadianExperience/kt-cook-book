@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/chip_backbround_color.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_error_place_holder.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_menu_book.xml" value="0.1645" />
         <entry key="app/src/main/res/drawable/splash_screen.xml" value="0.189" />
