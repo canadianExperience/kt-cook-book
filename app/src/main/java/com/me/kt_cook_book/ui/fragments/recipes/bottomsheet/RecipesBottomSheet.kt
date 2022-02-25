@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.me.kt_cook_book.databinding.RecipesBottomSheetBinding
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_DIET_TYPE
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_MEAL_TYPE
+import com.me.kt_cook_book.viewmodels.MainViewModel
 import com.me.kt_cook_book.viewmodels.RecipesViewModel
 import java.util.*
 
@@ -19,6 +21,7 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
     private var _binding: RecipesBottomSheetBinding? = null
     private val binding  get() = _binding!!
     private val recipesViewModel: RecipesViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
+    private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
 
     private var mealTypeChip = DEFAULT_MEAL_TYPE
     private var mealTypeChipId = 0
@@ -38,6 +41,13 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = RecipesBottomSheetBinding.bind(view)
+
+        mainViewModel.readMealAndDietType.observe(viewLifecycleOwner) { value ->
+            mealTypeChip = value.selectedMealType
+            dietTypeChip = value.selectedDietType
+            updateChip(value.selectedMealTypeId, binding.mealTypeChipGroup)
+            updateChip(value.selectedDietTypeId, binding.dietTypeChipGroup)
+        }
 
         binding.mealTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
             val chip = group.findViewById<Chip>(checkedId)
@@ -61,13 +71,8 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
                 dietTypeChip,
                 dietTypeChipId
             )
-        }
 
-        recipesViewModel.readMealAndDietType.observe(viewLifecycleOwner){value->
-            mealTypeChip = value.selectedMealType
-            dietTypeChip = value.selectedDietType
-            updateChip(value.selectedMealTypeId, binding.mealTypeChipGroup)
-            updateChip(value.selectedDietTypeId, binding.dietTypeChipGroup)
+           findNavController().popBackStack()
         }
     }
 

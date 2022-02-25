@@ -9,9 +9,11 @@
         android:name="com.me.kt_cook_book.ui.fragments.recipes.RecipesFragment"
         android:label="Recipes"
         tools:layout="@layout/fragment_recipes" >
+
         <action
             android:id="@+id/action_recipesFragment_to_recipesBottomSheet"
             app:destination="@id/recipesBottomSheet" />
+
     </fragment>
     <fragment
         android:id="@+id/favoriteRecipesFragment"

@@ -37,9 +37,9 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         binding.lifecycleOwner = this
 
         setupRecyclerView(binding.recyclerview)
+
         readDatabase()
         apiResponse()
-
         getRecipesEvents()
     }
 
@@ -71,9 +71,10 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 hideShimmerEffect()
             } else {
                 Log.d("RecipesFragment", "requestApiData called")
-                mainViewModel.onRequestApiData(recipesViewModel.applyQueries())
+                apiRequest()
             }
     }
+
 
     private fun apiResponse() = mainViewModel.recipesResponseLiveData.observe(viewLifecycleOwner){ response ->
         when (response) {
@@ -98,16 +99,20 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         recipesViewModel.recipesEvent.collect { event->
             when(event){
                 RecipesViewModel.RecipesEvent.NavigateToRecipesBottomSheet -> {
-                    goToRecipesBottomSheet()
+                    val action = RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet()
+                    findNavController().navigate(action)
+                }
+                RecipesViewModel.RecipesEvent.BackFromRecipesBottomSheet -> {
+                    apiRequest()
                 }
             }.exhaustive
         }
     }
 
-    private fun goToRecipesBottomSheet(){
-        val action = RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet()
-        findNavController().navigate(action)
+    private fun apiRequest(){
+        mainViewModel.apiRequest()
     }
+
 
     override fun onDestroy() {
         _binding = null
