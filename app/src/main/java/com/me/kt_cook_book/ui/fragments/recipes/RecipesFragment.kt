@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.me.kt_cook_book.R
 import com.me.kt_cook_book.data.apimanager.NetworkResult
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
 import com.me.kt_cook_book.ui.adapters.RecipesAdapter
+import com.me.kt_cook_book.utility.NetworkListener
 import com.me.kt_cook_book.utility.exhaustive
 import com.me.kt_cook_book.viewmodels.MainViewModel
 import com.me.kt_cook_book.viewmodels.RecipesViewModel
@@ -28,6 +30,8 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     private val mainViewModel by viewModels<MainViewModel>()
     private val recipesViewModel by viewModels<RecipesViewModel>()
 
+    private lateinit var networkListener: NetworkListener
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,7 +45,19 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         readDatabase()
         apiResponse()
         getRecipesEvents()
+
+       lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(mainViewModel.connectivity)
+                .collect { status ->
+                    Log.d("NetworkListener", status.toString())
+                    recipesViewModel.networkStatus = status
+                   // recipesViewModel.showNetworkStatus()
+                    readDatabase()
+                }
+        }
     }
+
 
     private fun showShimmerEffect() {
         binding.shimmer.startShimmer()

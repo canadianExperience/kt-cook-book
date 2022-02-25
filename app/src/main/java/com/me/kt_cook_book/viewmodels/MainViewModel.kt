@@ -2,6 +2,7 @@ package com.me.kt_cook_book.viewmodels
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.lifecycle.*
 import com.me.kt_cook_book.data.Repository
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
@@ -12,6 +13,7 @@ import com.me.kt_cook_book.data.datastore.MealAndDietType
 import com.me.kt_cook_book.utility.Constants
 import com.me.kt_cook_book.utility.Constants.Companion.API_KEY
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_RECIPES_NUMBER
+import com.me.kt_cook_book.utility.NetworkListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.channels.Channel
@@ -27,6 +29,8 @@ class MainViewModel @Inject constructor(
     private val connectivityManager: ConnectivityManager,
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
+
+    val connectivity get() = connectivityManager
 
     /** ROOM DATABASE*/
 
