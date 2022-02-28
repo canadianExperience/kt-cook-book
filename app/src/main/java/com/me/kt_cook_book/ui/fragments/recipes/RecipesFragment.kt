@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,20 +41,18 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
 
         setupRecyclerView(binding.recyclerview)
 
+        recipesViewModel.readBackOnline.observe(viewLifecycleOwner){
+            recipesViewModel.backOnline = it
+        }
+
         readDatabase()
         apiResponse()
         getRecipesEvents()
 
        lifecycleScope.launch {
-            networkListener = NetworkListener()
-            networkListener.checkNetworkAvailability(mainViewModel.connectivity)
-                .collect { status ->
-                    Log.d("NetworkListener", status.toString())
-                    recipesViewModel.networkStatus = status
-                   // recipesViewModel.showNetworkStatus()
-                    readDatabase()
-                }
-        }
+           networkListener = NetworkListener()
+           recipesViewModel.onNetworkStatusChanged(networkListener)
+       }
     }
 
 
@@ -99,11 +96,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
             }
             is NetworkResult.Error -> {
                 hideShimmerEffect()
-                Toast.makeText(
-                    requireContext(),
-                    response.message.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
+                recipesViewModel.showToast(response.message.toString())
             }
             is NetworkResult.Loading -> {
                 showShimmerEffect()
@@ -120,6 +113,9 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 }
                 RecipesViewModel.RecipesEvent.BackFromRecipesBottomSheet -> {
                     apiRequest()
+                }
+                is RecipesViewModel.RecipesEvent.ShowToast -> {
+                    Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
                 }
             }.exhaustive
         }

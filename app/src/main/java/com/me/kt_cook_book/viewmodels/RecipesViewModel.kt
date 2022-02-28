@@ -1,5 +1,6 @@
 package com.me.kt_cook_book.viewmodels
 
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val connectivityManager: ConnectivityManager,
 ): ViewModel() {
 
     private val recipesEventChannel = Channel<RecipesEvent>()
@@ -27,7 +29,12 @@ class RecipesViewModel @Inject constructor(
     var networkStatus = false
     var backOnline = false
 
-    val readBackOnline = dataStoreRepository.readBackOnline.asLiveData()
+    private val readBackOnlineFlow = dataStoreRepository.readBackOnline
+    val readBackOnline get() = readBackOnlineFlow.asLiveData()
+
+    private fun saveBackOnline(backOnline: Boolean) = viewModelScope.launch {
+        dataStoreRepository.saveBackOnline(backOnline)
+    }
 
     fun saveMealAndDietType(
         mealType: String,
@@ -44,8 +51,36 @@ class RecipesViewModel @Inject constructor(
         onBackFromRecipesBottomSheetClick()
     }
 
-    fun onRecipesBottomSheetClick() = viewModelScope.launch {
+    fun onRecipesBottomSheetClick() = if(networkStatus) navigateToRecipesBottomSheet()
+    else showToast("No Internet Connection")
+
+    private fun navigateToRecipesBottomSheet() = viewModelScope.launch {
         recipesEventChannel.send(RecipesEvent.NavigateToRecipesBottomSheet)
+    }
+
+    fun showToast(message: String) = viewModelScope.launch {
+        recipesEventChannel.send(RecipesEvent.ShowToast(message))
+    }
+
+    suspend fun onNetworkStatusChanged(networkListener: NetworkListener){
+        networkListener.checkNetworkAvailability(connectivityManager)
+            .collect { status ->
+                Log.d("NetworkListener", status.toString())
+                networkStatus = status
+                showNetworkStatus()
+            }
+    }
+
+    private fun showNetworkStatus() {
+        if (!networkStatus) {
+            showToast("No Internet Connection")
+            saveBackOnline(true)
+        } else if (networkStatus) {
+            if (backOnline) {
+                showToast("We're back online")
+                saveBackOnline(false)
+            }
+        }
     }
 
     private suspend fun onBackFromRecipesBottomSheetClick() = recipesEventChannel.send(RecipesEvent.BackFromRecipesBottomSheet)
@@ -53,5 +88,6 @@ class RecipesViewModel @Inject constructor(
     sealed class RecipesEvent{
         object NavigateToRecipesBottomSheet : RecipesEvent()
         object BackFromRecipesBottomSheet : RecipesEvent()
+        class ShowToast(val message: String) : RecipesEvent()
     }
 }
