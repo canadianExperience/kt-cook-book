@@ -30,8 +30,6 @@ class MainViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    val connectivity get() = connectivityManager
-
     /** ROOM DATABASE*/
 
     private val readRecipesFlow = repository.local.readDatabase()
@@ -61,59 +59,75 @@ class MainViewModel @Inject constructor(
         return queries
     }
 
+    private fun searchApiQuery(searchString: String):HashMap<String,String>{
+        val queries: HashMap<String, String> = HashMap()
+        queries[Constants.QUERY_SEARCH] = searchString
+        queries[Constants.QUERY_API_KEY] = API_KEY
+        queries[Constants.QUERY_ADD_RECIPE_INFORMATION] = "true"
+        queries[Constants.QUERY_FILL_INGREDIENTS] = "true"
+
+        return queries
+    }
+
     fun apiRequest() {
         recipesResponse.value = NetworkResult.Loading()
 
         viewModelScope.launch {
             readMealAndDietTypeFlow.collect { value ->
-                //Get queries from datastore
                 val queries = mealAndDietTypeQueries(value.selectedMealType, value.selectedDietType)
-
-                //RecipesSaveCall
-                if (hasInternetConnection()) {
-                    try {
-                        val response = repository.remote.getRecipes(queries)
-
-                        val foodRecipe = handleFoodRecipesResponse(response)
-                        foodRecipe?.let {
-                            recipesResponse.postValue(it)
-                            it.data?.let { data ->
-                                //Insert to local database (local cache)
-                                insertRecipes(RecipesEntity(data))
-                            }
-                        }
-                    } catch (e: Exception) {
-                        recipesResponse.postValue(NetworkResult.Error("Recipes Not Found"))
-                    }
-                } else {
-                    recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
-                }
+                getRecipesSaveCall(queries, false)
             }
         }
     }
 
+    fun searchApiRequest(searchQuery: String) {
+        recipesResponse.value = NetworkResult.Loading()
 
-    private suspend fun getRecipesSaveCall(queries: HashMap<String, String>) {
+        viewModelScope.launch {
+            val queries = searchApiQuery(searchQuery)
+            getRecipesSaveCall(queries, true)
+        }
+    }
 
-        recipesResponse.postValue(NetworkResult.Loading())
-        if(hasInternetConnection()){
+    private suspend fun getRecipesSaveCall(queries: HashMap<String, String>, isSearchApi: Boolean) {
+
+        if (hasInternetConnection()) {
             try {
-                val response = repository.remote.getRecipes(queries)
-
+                val response = if(isSearchApi) repository.remote.searchRecipes(queries) else repository.remote.getRecipes(queries)
                 val foodRecipe = handleFoodRecipesResponse(response)
                 foodRecipe?.let {
                     recipesResponse.postValue(it)
-                    it.data?.let { data->
+                    it.data?.let { data ->
                         //Insert to local database (local cache)
                         insertRecipes(RecipesEntity(data))
                     }
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 recipesResponse.postValue(NetworkResult.Error("Recipes Not Found"))
             }
-        } else{
+        } else {
             recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
+
+//        recipesResponse.postValue(NetworkResult.Loading())
+//        if(hasInternetConnection()){
+//            try {
+//                val response = repository.remote.getRecipes(queries)
+//
+//                val foodRecipe = handleFoodRecipesResponse(response)
+//                foodRecipe?.let {
+//                    recipesResponse.postValue(it)
+//                    it.data?.let { data->
+//                        //Insert to local database (local cache)
+//                        insertRecipes(RecipesEntity(data))
+//                    }
+//                }
+//            } catch (e: Exception){
+//                recipesResponse.postValue(NetworkResult.Error("Recipes Not Found"))
+//            }
+//        } else{
+//            recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
+//        }
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>?{
@@ -147,5 +161,4 @@ class MainViewModel @Inject constructor(
             else -> false
         }
     }
-
 }

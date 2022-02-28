@@ -2,6 +2,7 @@ package com.me.kt_cook_book.viewmodels
 
 import android.net.ConnectivityManager
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.me.kt_cook_book.utility.NetworkListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

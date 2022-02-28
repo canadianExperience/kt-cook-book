@@ -2,8 +2,11 @@ package com.me.kt_cook_book.ui.fragments.recipes
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +25,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RecipesFragment : Fragment(R.layout.fragment_recipes) {
+class RecipesFragment : Fragment(R.layout.fragment_recipes),
+    SearchView.OnQueryTextListener{
+
     private var _binding: FragmentRecipesBinding? = null
     private val binding  get() = _binding!!
     private val recipesAdapter by lazy { RecipesAdapter() }
@@ -30,6 +35,8 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     private val recipesViewModel by viewModels<RecipesViewModel>()
 
     private lateinit var networkListener: NetworkListener
+
+    private var searchView: SearchView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,14 +52,21 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
             recipesViewModel.backOnline = it
         }
 
+        binding.recipesFab.setOnClickListener {
+            searchView?.onActionViewCollapsed()
+            recipesViewModel.onRecipesBottomSheetClick()
+        }
+
         readDatabase()
         apiResponse()
         getRecipesEvents()
 
-       lifecycleScope.launch {
-           networkListener = NetworkListener()
-           recipesViewModel.onNetworkStatusChanged(networkListener)
-       }
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            recipesViewModel.onNetworkStatusChanged(networkListener)
+        }
+
+        setHasOptionsMenu(true)
     }
 
 
@@ -78,14 +92,14 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     }
 
     private fun readDatabase() = mainViewModel.readRecipes.observe(viewLifecycleOwner) { databaseList ->
-            if (databaseList.isNotEmpty()) {
-                Log.d("RecipesFragment", "requestDatabase called")
-                recipesAdapter.setData(databaseList[0].foodRecipe)
-                hideShimmerEffect()
-            } else {
-                Log.d("RecipesFragment", "requestApiData called")
-                apiRequest()
-            }
+        if (databaseList.isNotEmpty()) {
+            Log.d("RecipesFragment", "requestDatabase called")
+            recipesAdapter.setData(databaseList[0].foodRecipe)
+            hideShimmerEffect()
+        } else {
+            Log.d("RecipesFragment", "requestApiData called")
+            apiRequest()
+        }
     }
 
 
@@ -122,12 +136,38 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     }
 
     private fun apiRequest(){
+        showShimmerEffect()
         mainViewModel.apiRequest()
+    }
+
+    private fun searchApiRequest(query: String) {
+        showShimmerEffect()
+        mainViewModel.searchApiRequest(query)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.recipes_menu, menu)
+
+        val search = menu.findItem(R.id.menu_search)
+        searchView = search.actionView as? SearchView
+
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.maxWidth = Integer.MAX_VALUE
+        searchView?.setOnQueryTextListener(this)
     }
 
 
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        query?.let {searchApiRequest(it) }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        return true
     }
 }
