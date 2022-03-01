@@ -31,4 +31,7 @@
     <color name="checkedChipTextColor">@color/purple_500</color>
     <color name="chipTextColor">@color/darkGray</color>
 
+    //Details
+    <color name="itemColor">@color/darker</color>
+
 </resources>

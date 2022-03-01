@@ -6,8 +6,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.me.kt_cook_book.R
 import com.me.kt_cook_book.data.apimanager.NetworkResult
+import com.me.kt_cook_book.data.apimanager.models.Result
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
+import com.me.kt_cook_book.ui.adapters.IRecipeClickListener
 import com.me.kt_cook_book.ui.adapters.RecipesAdapter
 import com.me.kt_cook_book.utility.NetworkListener
 import com.me.kt_cook_book.utility.exhaustive
@@ -26,12 +30,13 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RecipesFragment : Fragment(R.layout.fragment_recipes),
-    SearchView.OnQueryTextListener{
+    SearchView.OnQueryTextListener,
+IRecipeClickListener{
 
     private var _binding: FragmentRecipesBinding? = null
     private val binding  get() = _binding!!
-    private val recipesAdapter by lazy { RecipesAdapter() }
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val recipesAdapter by lazy { RecipesAdapter(this) }
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private val recipesViewModel by viewModels<RecipesViewModel>()
 
     private lateinit var networkListener: NetworkListener
@@ -50,11 +55,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes),
 
         recipesViewModel.readBackOnline.observe(viewLifecycleOwner){
             recipesViewModel.backOnline = it
-        }
-
-        binding.recipesFab.setOnClickListener {
-            searchView?.onActionViewCollapsed()
-            recipesViewModel.onRecipesBottomSheetClick()
         }
 
         readDatabase()
@@ -122,6 +122,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes),
         recipesViewModel.recipesEvent.collect { event->
             when(event){
                 RecipesViewModel.RecipesEvent.NavigateToRecipesBottomSheet -> {
+                    searchView?.onActionViewCollapsed()
                     val action = RecipesFragmentDirections.actionRecipesFragmentToRecipesBottomSheet()
                     findNavController().navigate(action)
                 }
@@ -130,6 +131,11 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes),
                 }
                 is RecipesViewModel.RecipesEvent.ShowToast -> {
                     Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
+                }
+                is RecipesViewModel.RecipesEvent.NavigateToDetailsFragment -> {
+                    searchView?.onActionViewCollapsed()
+                    val action = RecipesFragmentDirections.actionRecipesFragmentToDetailsFragment(event.result)
+                    findNavController().navigate(action)
                 }
             }.exhaustive
         }
@@ -169,5 +175,9 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes),
 
     override fun onQueryTextChange(query: String?): Boolean {
         return true
+    }
+
+    override fun onRecipeItemClick(result: Result) {
+        recipesViewModel.onRecipeClick(result)
     }
 }

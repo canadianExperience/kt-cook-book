@@ -6,9 +6,14 @@
         <variable
             name="result"
             type="com.me.kt_cook_book.data.apimanager.models.Result" />
+
+        <variable
+            name="clickListener"
+            type="com.me.kt_cook_book.ui.adapters.IRecipeClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:onClick="@{() -> clickListener.onRecipeItemClick(result)}"
         android:id="@+id/recipesRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

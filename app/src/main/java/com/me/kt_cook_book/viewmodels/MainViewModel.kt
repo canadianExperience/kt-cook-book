@@ -30,6 +30,13 @@ class MainViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
+    private val displayBottomNavFlow = MutableStateFlow(true)
+    val displayBottomNav: LiveData<Boolean> get() = displayBottomNavFlow.asLiveData()
+
+    fun setDisplayBottomNavFlow(isShow: Boolean){
+        displayBottomNavFlow.value = isShow
+    }
+
     /** ROOM DATABASE*/
 
     private val readRecipesFlow = repository.local.readDatabase()
@@ -108,26 +115,6 @@ class MainViewModel @Inject constructor(
         } else {
             recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
         }
-
-//        recipesResponse.postValue(NetworkResult.Loading())
-//        if(hasInternetConnection()){
-//            try {
-//                val response = repository.remote.getRecipes(queries)
-//
-//                val foodRecipe = handleFoodRecipesResponse(response)
-//                foodRecipe?.let {
-//                    recipesResponse.postValue(it)
-//                    it.data?.let { data->
-//                        //Insert to local database (local cache)
-//                        insertRecipes(RecipesEntity(data))
-//                    }
-//                }
-//            } catch (e: Exception){
-//                recipesResponse.postValue(NetworkResult.Error("Recipes Not Found"))
-//            }
-//        } else{
-//            recipesResponse.postValue(NetworkResult.Error("No Internet Connection"))
-//        }
     }
 
     private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe>?{

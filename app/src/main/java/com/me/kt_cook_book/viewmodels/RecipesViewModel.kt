@@ -2,17 +2,16 @@ package com.me.kt_cook_book.viewmodels
 
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.me.kt_cook_book.data.apimanager.models.Result
 import com.me.kt_cook_book.data.datastore.DataStoreRepository
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_DIET_TYPE
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.me.kt_cook_book.utility.NetworkListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,7 +53,8 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun onRecipesBottomSheetClick() = if(networkStatus) navigateToRecipesBottomSheet()
-    else showToast("No Internet Connection")
+        else showToast("No Internet Connection")
+
 
     private fun navigateToRecipesBottomSheet() = viewModelScope.launch {
         recipesEventChannel.send(RecipesEvent.NavigateToRecipesBottomSheet)
@@ -85,11 +85,16 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
+    fun onRecipeClick(result: Result) = viewModelScope.launch {
+        recipesEventChannel.send(RecipesEvent.NavigateToDetailsFragment(result))
+    }
+
     private suspend fun onBackFromRecipesBottomSheetClick() = recipesEventChannel.send(RecipesEvent.BackFromRecipesBottomSheet)
 
     sealed class RecipesEvent{
         object NavigateToRecipesBottomSheet : RecipesEvent()
         object BackFromRecipesBottomSheet : RecipesEvent()
         class ShowToast(val message: String) : RecipesEvent()
+        class NavigateToDetailsFragment(val result: Result) : RecipesEvent()
     }
 }

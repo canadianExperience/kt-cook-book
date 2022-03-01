@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_recipesFragment_to_recipesBottomSheet"
             app:destination="@id/recipesBottomSheet" />
+        <action
+            android:id="@+id/action_recipesFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
 
     </fragment>
     <fragment
@@ -30,4 +33,13 @@
         android:name="com.me.kt_cook_book.ui.fragments.recipes.bottomsheet.RecipesBottomSheet"
         android:label="recipes_bottom_sheet"
         tools:layout="@layout/recipes_bottom_sheet" />
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.me.kt_cook_book.ui.fragments.details.DetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="result"
+            app:argType="com.me.kt_cook_book.data.apimanager.models.Result" />
+    </fragment>
 </navigation>

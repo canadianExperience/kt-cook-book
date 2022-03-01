@@ -9,7 +9,9 @@ import com.me.kt_cook_book.databinding.RecipesRowLayoutBinding
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import com.me.kt_cook_book.data.apimanager.models.Result
 
-class RecipesAdapter: RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
+class RecipesAdapter(
+    private val clickListener: IRecipeClickListener
+): RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     private var recipes = emptyList<Result>()
 
@@ -37,8 +39,9 @@ class RecipesAdapter: RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     class MyViewHolder(private val binding: RecipesRowLayoutBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(result: Result){
+        fun bind(result: Result, clickListener: IRecipeClickListener){
             binding.result = result
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -57,7 +60,7 @@ class RecipesAdapter: RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentRecipe = recipes[position]
-        holder.bind(currentRecipe)
+        holder.bind(currentRecipe, clickListener)
     }
 
     override fun getItemCount(): Int {

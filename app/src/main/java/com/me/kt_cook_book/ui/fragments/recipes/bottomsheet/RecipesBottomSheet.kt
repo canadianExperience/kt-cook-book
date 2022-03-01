@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -21,8 +22,8 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
     private var _binding: RecipesBottomSheetBinding? = null
     private val binding  get() = _binding!!
     private val recipesViewModel: RecipesViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
-    private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
-
+    //private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private var mealTypeChip = DEFAULT_MEAL_TYPE
     private var mealTypeChipId = 0
     private var dietTypeChip = DEFAULT_DIET_TYPE
