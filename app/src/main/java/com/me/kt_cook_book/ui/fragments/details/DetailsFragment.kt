@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
@@ -14,13 +15,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.me.kt_cook_book.R
 import com.me.kt_cook_book.databinding.FragmentDetailsBinding
 import com.me.kt_cook_book.ui.adapters.PagerAdapter
+import com.me.kt_cook_book.viewmodels.DetailsViewModel
 import com.me.kt_cook_book.viewmodels.MainViewModel
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var _binding: FragmentDetailsBinding? = null
     private val binding  get() = _binding!!
-    private val args by navArgs<DetailsFragmentArgs>()
     private val mainViewModel by activityViewModels<MainViewModel>()
+    private val detailsViewModel by viewModels<DetailsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

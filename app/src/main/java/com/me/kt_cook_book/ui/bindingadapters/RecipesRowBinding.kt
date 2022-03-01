@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import coil.load
 import com.me.kt_cook_book.R
+import org.jsoup.Jsoup
 
 class RecipesRowBinding {
 
@@ -55,6 +56,15 @@ class RecipesRowBinding {
                         )
                     }
                 }
+            }
+        }
+
+        @BindingAdapter("parseHtml")
+        @JvmStatic
+        fun parseHtml(textView: TextView, description: String?){
+            description?.let {
+                val desc = Jsoup.parse(description).text()
+                textView.text = desc
             }
         }
     }
