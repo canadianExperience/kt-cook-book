@@ -8,34 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.me.kt_cook_book.databinding.RecipesRowLayoutBinding
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import com.me.kt_cook_book.data.apimanager.models.Result
+import com.me.kt_cook_book.utility.MyDiffUtil
 
 class RecipesAdapter(
     private val clickListener: IRecipeClickListener
 ): RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
 
     private var recipes = emptyList<Result>()
-
-    class RecipesDiffUtil(
-        private val oldList: List<Result>,
-        private val newList: List<Result>
-    ): DiffUtil.Callback(){
-        override fun getOldListSize(): Int {
-            return oldList.size
-        }
-
-        override fun getNewListSize(): Int {
-            return newList.size
-        }
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] === newList[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return  oldList[oldItemPosition] == newList[newItemPosition]
-        }
-
-    }
 
     class MyViewHolder(private val binding: RecipesRowLayoutBinding): RecyclerView.ViewHolder(binding.root){
 
@@ -68,7 +47,7 @@ class RecipesAdapter(
     }
 
     fun setData(newData: FoodRecipe){
-        val recipesDiffUtil = RecipesDiffUtil(recipes, newData.results)
+        val recipesDiffUtil = MyDiffUtil(recipes, newData.results)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
         recipes = newData.results
         diffUtilResult.dispatchUpdatesTo(this)

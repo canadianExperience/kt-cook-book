@@ -108,7 +108,7 @@
 
         <ImageView
             android:id="@+id/vegetarian_imageView"
-            checkmarkColor="@{result.vegetarian}"
+            app:checkmarkColor="@{result.vegetarian}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -118,7 +118,7 @@
 
         <TextView
             android:id="@+id/vegetarian_textView"
-            checkmarkColor="@{result.vegetarian}"
+            app:checkmarkColor="@{result.vegetarian}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -129,7 +129,7 @@
 
         <ImageView
             android:id="@+id/vegan_imageView"
-            checkmarkColor="@{result.vegan}"
+            app:checkmarkColor="@{result.vegan}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -139,7 +139,7 @@
 
         <TextView
             android:id="@+id/vegan_textView"
-            checkmarkColor="@{result.vegan}"
+            app:checkmarkColor="@{result.vegan}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -150,7 +150,7 @@
 
         <ImageView
             android:id="@+id/gluten_free_imageView"
-            checkmarkColor="@{result.glutenFree}"
+            app:checkmarkColor="@{result.glutenFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -161,7 +161,7 @@
 
         <TextView
             android:id="@+id/gluten_free_textView"
-            checkmarkColor="@{result.glutenFree}"
+            app:checkmarkColor="@{result.glutenFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -172,7 +172,7 @@
 
         <ImageView
             android:id="@+id/dairy_free_imageView"
-            checkmarkColor="@{result.dairyFree}"
+            app:checkmarkColor="@{result.dairyFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -182,7 +182,7 @@
 
         <TextView
             android:id="@+id/dairy_free_textView"
-            checkmarkColor="@{result.dairyFree}"
+            app:checkmarkColor="@{result.dairyFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -193,7 +193,7 @@
 
         <ImageView
             android:id="@+id/healthy_imageView"
-            checkmarkColor="@{result.veryHealthy}"
+            app:checkmarkColor="@{result.veryHealthy}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -204,7 +204,7 @@
 
         <TextView
             android:id="@+id/healthy_textView"
-            checkmarkColor="@{result.veryHealthy}"
+            app:checkmarkColor="@{result.veryHealthy}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -215,7 +215,7 @@
 
         <ImageView
             android:id="@+id/cheap_imageView"
-            checkmarkColor="@{result.cheap}"
+            app:checkmarkColor="@{result.cheap}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -225,7 +225,7 @@
 
         <TextView
             android:id="@+id/cheap_textView"
-            checkmarkColor="@{result.cheap}"
+            app:checkmarkColor="@{result.cheap}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -11,7 +11,7 @@ class OverviewBinding {
 
     companion object {
 
-        @BindingAdapter("checkmarkColor")
+        @BindingAdapter("app:checkmarkColor")
         @JvmStatic
         fun checkmarkColor(
             view: View,

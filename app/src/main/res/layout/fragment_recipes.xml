@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/error_imageView"
-            readApiResponse="@{mainViewModel.recipesResponseLiveData}"
-            readDatabase="@{mainViewModel.readRecipes}"
+            app:readApiResponse="@{mainViewModel.recipesResponseLiveData}"
+            app:readDatabase="@{mainViewModel.readRecipes}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:alpha="0.5"
@@ -38,8 +38,8 @@
 
         <TextView
             android:id="@+id/textView"
-            readApiResponse2="@{mainViewModel.recipesResponseLiveData}"
-            readDatabase2="@{mainViewModel.readRecipes}"
+            app:readApiResponse2="@{mainViewModel.recipesResponseLiveData}"
+            app:readDatabase2="@{mainViewModel.readRecipes}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"

@@ -59,7 +59,7 @@ class RecipesRowBinding {
             }
         }
 
-        @BindingAdapter("parseHtml")
+        @BindingAdapter("app:parseHtml")
         @JvmStatic
         fun parseHtml(textView: TextView, description: String?){
             description?.let {

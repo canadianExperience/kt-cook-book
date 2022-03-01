@@ -51,7 +51,7 @@ IRecipeClickListener{
         binding.recipesViewModel = recipesViewModel
         binding.lifecycleOwner = this
 
-        setupRecyclerView(binding.recyclerview)
+        setupRecyclerView()
 
         recipesViewModel.readBackOnline.observe(viewLifecycleOwner){
             recipesViewModel.backOnline = it
@@ -82,8 +82,8 @@ IRecipeClickListener{
         binding.recyclerview.visibility = View.VISIBLE
     }
 
-    private fun setupRecyclerView(recyclerview: RecyclerView) {
-        recyclerview.apply {
+    private fun setupRecyclerView() {
+        binding.recyclerview.apply {
             adapter = recipesAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }

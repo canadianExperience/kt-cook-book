@@ -12,7 +12,7 @@ class RecipesBinding {
 
     companion object {
 
-        @BindingAdapter("readApiResponse", "readDatabase", requireAll = true)
+        @BindingAdapter("app:readApiResponse", "app:readDatabase", requireAll = true)
         @JvmStatic
         fun errorImageViewVisibility(
             imageView: ImageView,
@@ -28,7 +28,7 @@ class RecipesBinding {
             }
         }
 
-        @BindingAdapter("readApiResponse2", "readDatabase2", requireAll = true)
+        @BindingAdapter("app:readApiResponse2", "app:readDatabase2", requireAll = true)
         @JvmStatic
         fun errorTextViewVisibility(
             textView: TextView,
