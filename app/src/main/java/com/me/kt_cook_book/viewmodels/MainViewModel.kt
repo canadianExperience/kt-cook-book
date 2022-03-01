@@ -2,21 +2,17 @@ package com.me.kt_cook_book.viewmodels
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
 import androidx.lifecycle.*
 import com.me.kt_cook_book.data.Repository
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import com.me.kt_cook_book.data.apimanager.NetworkResult
-import com.me.kt_cook_book.data.database.RecipesEntity
+import com.me.kt_cook_book.data.database.entities.RecipesEntity
 import com.me.kt_cook_book.data.datastore.DataStoreRepository
 import com.me.kt_cook_book.data.datastore.MealAndDietType
 import com.me.kt_cook_book.utility.Constants
 import com.me.kt_cook_book.utility.Constants.Companion.API_KEY
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_RECIPES_NUMBER
-import com.me.kt_cook_book.utility.NetworkListener
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -39,7 +35,7 @@ class MainViewModel @Inject constructor(
 
     /** ROOM DATABASE*/
 
-    private val readRecipesFlow = repository.local.readDatabase()
+    private val readRecipesFlow = repository.local.readRecipes()
     val readRecipes: LiveData<List<RecipesEntity>> get() = readRecipesFlow.asLiveData()
 
     private suspend fun insertRecipes(recipesEntity: RecipesEntity) = repository.local.insertRecipes(recipesEntity)

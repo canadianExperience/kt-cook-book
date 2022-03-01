@@ -1,4 +1,4 @@
-package com.me.kt_cook_book.data.database
+package com.me.kt_cook_book.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

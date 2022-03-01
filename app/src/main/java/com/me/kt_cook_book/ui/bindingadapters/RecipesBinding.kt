@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.me.kt_cook_book.data.apimanager.NetworkResult
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
-import com.me.kt_cook_book.data.database.RecipesEntity
+import com.me.kt_cook_book.data.database.entities.RecipesEntity
 
 class RecipesBinding {
 
