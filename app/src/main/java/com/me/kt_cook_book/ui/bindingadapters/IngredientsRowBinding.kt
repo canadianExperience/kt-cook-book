@@ -22,16 +22,18 @@ class IngredientsRowBinding {
 
         @BindingAdapter("app:setIngredientName")
         @JvmStatic
-        fun setIngredientName(view: TextView, name: String){
-            view.text = name.uppercase(Locale.getDefault())
+        fun setIngredientName(view: TextView, name: String?){
+            name?.let {
+                view.text = it.uppercase(Locale.getDefault())
+            }
         }
 
         @BindingAdapter("app:setIngredientAmount")
         @JvmStatic
-        fun setIngredientAmount(view: TextView, amount: Double){
-            view.text = amount.toString()
+        fun setIngredientAmount(view: TextView, amount: Double?){
+            amount?.let {
+                view.text = it.toString()
+            }
         }
-
     }
-
 }

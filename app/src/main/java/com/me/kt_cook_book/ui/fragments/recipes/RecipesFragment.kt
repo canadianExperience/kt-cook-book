@@ -35,7 +35,7 @@ IRecipeClickListener{
 
     private var _binding: FragmentRecipesBinding? = null
     private val binding  get() = _binding!!
-    private val recipesAdapter by lazy { RecipesAdapter(this) }
+    private lateinit var recipesAdapter: RecipesAdapter
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val recipesViewModel by viewModels<RecipesViewModel>()
 
@@ -45,6 +45,8 @@ IRecipeClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recipesAdapter = RecipesAdapter(this)
 
         _binding = FragmentRecipesBinding.bind(view)
         binding.mainViewModel = mainViewModel
@@ -92,6 +94,7 @@ IRecipeClickListener{
     }
 
     private fun readDatabase() = mainViewModel.readRecipes.observe(viewLifecycleOwner) { databaseList ->
+        showShimmerEffect()
         if (databaseList.isNotEmpty()) {
             Log.d("RecipesFragment", "requestDatabase called")
             recipesAdapter.setData(databaseList[0].foodRecipe)
@@ -134,7 +137,7 @@ IRecipeClickListener{
                 }
                 is RecipesViewModel.RecipesEvent.NavigateToDetailsFragment -> {
                     searchView?.onActionViewCollapsed()
-                    val action = RecipesFragmentDirections.actionRecipesFragmentToDetailsFragment(event.result)
+                    val action = RecipesFragmentDirections.actionRecipesFragmentToDetailsFragment(event.result, event.isFavorite)
                     findNavController().navigate(action)
                 }
             }.exhaustive

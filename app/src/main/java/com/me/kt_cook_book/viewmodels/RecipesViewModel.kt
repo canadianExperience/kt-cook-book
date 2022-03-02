@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.me.kt_cook_book.data.Repository
 import com.me.kt_cook_book.data.apimanager.models.Result
 import com.me.kt_cook_book.data.datastore.DataStoreRepository
 import com.me.kt_cook_book.utility.Constants.Companion.DEFAULT_DIET_TYPE
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
+    private val repository: Repository,
     private val dataStoreRepository: DataStoreRepository,
     private val connectivityManager: ConnectivityManager,
 ): ViewModel() {
@@ -86,7 +88,8 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun onRecipeClick(result: Result) = viewModelScope.launch {
-        recipesEventChannel.send(RecipesEvent.NavigateToDetailsFragment(result))
+        val isFavorite = repository.local.isFavoriteRecipe(result.recipeId)
+        recipesEventChannel.send(RecipesEvent.NavigateToDetailsFragment(result, isFavorite))
     }
 
     private suspend fun onBackFromRecipesBottomSheetClick() = recipesEventChannel.send(RecipesEvent.BackFromRecipesBottomSheet)
@@ -95,6 +98,6 @@ class RecipesViewModel @Inject constructor(
         object NavigateToRecipesBottomSheet : RecipesEvent()
         object BackFromRecipesBottomSheet : RecipesEvent()
         class ShowToast(val message: String) : RecipesEvent()
-        class NavigateToDetailsFragment(val result: Result) : RecipesEvent()
+        class NavigateToDetailsFragment(val result: Result, val isFavorite: Boolean) : RecipesEvent()
     }
 }

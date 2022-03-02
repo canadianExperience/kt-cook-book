@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/recipes_bottom_sheet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/recipes_row_layout.xml" value="0.165" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/details_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/recipes_menu.xml" value="0.1" />
       </map>
     </option>

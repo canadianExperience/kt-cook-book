@@ -6,7 +6,7 @@ import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
 import com.me.kt_cook_book.utility.Constants.Companion.RECIPES_TABLE
 
 @Entity(tableName = RECIPES_TABLE)
-class RecipesEntity(
+data class RecipesEntity(
     var foodRecipe: FoodRecipe
 ) {
     @PrimaryKey(autoGenerate = false)

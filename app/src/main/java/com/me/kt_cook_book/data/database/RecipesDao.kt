@@ -19,8 +19,11 @@ interface RecipesDao {
     @Query("SELECT * FROM favorite_recipes_table ORDER BY id ASC")
     fun readFavoriteRecipes(): Flow<List<FavoritesEntity>>
 
-    @Delete
-    suspend fun deleteFavoriteRecipe(favoritesEntity: FavoritesEntity)
+    @Query("SELECT CASE WHEN exists(SELECT 1 from favorite_recipes_table where (recipeId ==:resultId)  LIMIT 1) THEN CAST(1 as BIT) ELSE CAST(0 as BIT) END")
+    suspend fun isFavoriteRecipe(resultId: Int): Boolean
+
+    @Query("DELETE FROM favorite_recipes_table WHERE recipeId =:recipeId")
+    suspend fun deleteFavoriteRecipe(recipeId: Int)
 
     @Query("DELETE FROM favorite_recipes_table")
     suspend fun deleteAllFavoriteRecipes()

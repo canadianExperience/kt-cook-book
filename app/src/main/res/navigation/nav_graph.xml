@@ -41,5 +41,8 @@
         <argument
             android:name="result"
             app:argType="com.me.kt_cook_book.data.apimanager.models.Result" />
+        <argument
+            android:name="isFavorite"
+            app:argType="boolean" />
     </fragment>
 </navigation>
