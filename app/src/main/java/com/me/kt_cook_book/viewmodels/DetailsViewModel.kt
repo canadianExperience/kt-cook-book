@@ -33,16 +33,16 @@ class DetailsViewModel @Inject constructor(
 
     private fun addFavoriteRecipe(recipe: Result) = viewModelScope.launch {
         repository.local.insertFavoriteRecipes(FavoritesEntity(recipe.recipeId, recipe))
-        detailsEventChannel.send(DetailsEvent.ShowSnackbar("Recipe added to favorites"))
+        detailsEventChannel.send(DetailsEvent.ShowToast("Recipe added to favorites"))
     }
 
     private fun deleteFavoriteRecipe(recipeId: Int) = viewModelScope.launch {
         repository.local.deleteFavoriteRecipe(recipeId)
-        detailsEventChannel.send(DetailsEvent.ShowSnackbar("Recipe removed from favorites"))
+        detailsEventChannel.send(DetailsEvent.ShowToast("Recipe removed from favorites"))
     }
 
     sealed class DetailsEvent{
-        class ShowSnackbar(val message: String) : DetailsEvent()
+        class ShowToast(val message: String) : DetailsEvent()
     }
 
 }

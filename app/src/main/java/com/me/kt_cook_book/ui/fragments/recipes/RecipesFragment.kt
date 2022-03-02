@@ -35,7 +35,7 @@ IRecipeClickListener{
 
     private var _binding: FragmentRecipesBinding? = null
     private val binding  get() = _binding!!
-    private lateinit var recipesAdapter: RecipesAdapter
+    private val recipesAdapter by lazy { RecipesAdapter(this) }
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val recipesViewModel by viewModels<RecipesViewModel>()
 
@@ -45,8 +45,6 @@ IRecipeClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recipesAdapter = RecipesAdapter(this)
 
         _binding = FragmentRecipesBinding.bind(view)
         binding.mainViewModel = mainViewModel
@@ -97,7 +95,8 @@ IRecipeClickListener{
         showShimmerEffect()
         if (databaseList.isNotEmpty()) {
             Log.d("RecipesFragment", "requestDatabase called")
-            recipesAdapter.setData(databaseList[0].foodRecipe)
+            val food = databaseList[0].foodRecipe
+            recipesAdapter.setData(food.results)
             hideShimmerEffect()
         } else {
             Log.d("RecipesFragment", "requestApiData called")

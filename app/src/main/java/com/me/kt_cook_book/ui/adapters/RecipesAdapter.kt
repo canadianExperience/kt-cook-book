@@ -46,10 +46,11 @@ class RecipesAdapter(
        return recipes.size
     }
 
-    fun setData(newData: FoodRecipe){
-        val recipesDiffUtil = MyDiffUtil(recipes, newData.results)
+    fun setData(newData: List<Result>){
+        val recipesDiffUtil = MyDiffUtil(recipes, newData)
         val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-        recipes = newData.results
+        recipes = newData
+
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

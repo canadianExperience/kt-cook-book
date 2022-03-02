@@ -22,7 +22,11 @@
         android:id="@+id/favoriteRecipesFragment"
         android:name="com.me.kt_cook_book.ui.fragments.favorites.FavoriteRecipesFragment"
         android:label="Favorites"
-        tools:layout="@layout/fragment_favorite_recipes" />
+        tools:layout="@layout/fragment_favorite_recipes" >
+        <action
+            android:id="@+id/action_favoriteRecipesFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/foodJokeFragment"
         android:name="com.me.kt_cook_book.ui.fragments.foodjoke.FoodJokeFragment"

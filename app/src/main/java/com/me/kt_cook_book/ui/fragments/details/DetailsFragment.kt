@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -13,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.me.kt_cook_book.R
@@ -104,14 +104,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun getDetailsEvents() = lifecycleScope.launch {
         detailsViewModel.detailsEvent.collect { event->
             when(event){
-                is DetailsViewModel.DetailsEvent.ShowSnackbar -> {
-                    Snackbar.make(
-                        requireView(),
-                        event.message,
-                        Snackbar.LENGTH_LONG
-                    ).setAction("okay"){
-
-                    }.show()
+                is DetailsViewModel.DetailsEvent.ShowToast -> {
+                    Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
                 }
             }.exhaustive
         }
