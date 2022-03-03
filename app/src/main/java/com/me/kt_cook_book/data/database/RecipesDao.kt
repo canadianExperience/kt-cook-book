@@ -16,8 +16,14 @@ interface RecipesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteRecipe(favoritesEntity: FavoritesEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllFavoriteRecipes(favoritesEntityList: List<FavoritesEntity>)
+
     @Query("SELECT * FROM favorite_recipes_table ORDER BY id ASC")
     fun readFavoriteRecipes(): Flow<List<FavoritesEntity>>
+
+    @Query("SELECT * FROM favorite_recipes_table WHERE recipeId ==:recipeId")
+    suspend fun readFavoriteRecipe(recipeId: Int): FavoritesEntity
 
     @Query("SELECT CASE WHEN exists(SELECT 1 from favorite_recipes_table where (recipeId ==:resultId)  LIMIT 1) THEN CAST(1 as BIT) ELSE CAST(0 as BIT) END")
     suspend fun isFavoriteRecipe(resultId: Int): Boolean

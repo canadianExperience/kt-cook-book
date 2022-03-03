@@ -11,23 +11,19 @@ class LocalDataSource @Inject constructor(
 ) {
     fun readRecipes(): Flow<List<RecipesEntity>> = recipesDao.readRecipes()
 
-    fun readFavoriteRecipes(): Flow<List<FavoritesEntity>> {
-        return recipesDao.readFavoriteRecipes()
-    }
+    fun readFavoriteRecipes(): Flow<List<FavoritesEntity>> = recipesDao.readFavoriteRecipes()
+
+    suspend fun readFavoriteRecipe(recipeId: Int) = recipesDao.readFavoriteRecipe(recipeId)
 
     suspend fun insertRecipes(recipesEntity: RecipesEntity) = recipesDao.insertRecipes(recipesEntity)
 
-    suspend fun insertFavoriteRecipes(favoritesEntity: FavoritesEntity) {
-        recipesDao.insertFavoriteRecipe(favoritesEntity)
-    }
+    suspend fun insertFavoriteRecipes(favoritesEntity: FavoritesEntity) = recipesDao.insertFavoriteRecipe(favoritesEntity)
+
+    suspend fun insertAllFavoriteRecipes(favoritesEntityList: List<FavoritesEntity>) = recipesDao.insertAllFavoriteRecipes(favoritesEntityList)
 
     suspend fun isFavoriteRecipe(resultId: Int): Boolean = recipesDao.isFavoriteRecipe(resultId)
 
-    suspend fun deleteFavoriteRecipe(recipeId: Int) {
-        recipesDao.deleteFavoriteRecipe(recipeId)
-    }
+    suspend fun deleteFavoriteRecipe(recipeId: Int) = recipesDao.deleteFavoriteRecipe(recipeId)
 
-    suspend fun deleteAllFavoriteRecipes() {
-        recipesDao.deleteAllFavoriteRecipes()
-    }
+    suspend fun deleteAllFavoriteRecipes() = recipesDao.deleteAllFavoriteRecipes()
 }

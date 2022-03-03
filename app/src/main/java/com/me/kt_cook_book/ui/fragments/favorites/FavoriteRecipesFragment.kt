@@ -6,21 +6,22 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.me.kt_cook_book.R
 import com.me.kt_cook_book.data.apimanager.models.Result
+import com.me.kt_cook_book.data.database.entities.FavoritesEntity
 import com.me.kt_cook_book.databinding.FragmentFavoriteRecipesBinding
 import com.me.kt_cook_book.ui.adapters.IRecipeClickListener
 import com.me.kt_cook_book.ui.adapters.RecipesAdapter
-import com.me.kt_cook_book.ui.fragments.recipes.RecipesFragmentDirections
+import com.me.kt_cook_book.utility.DeleteType
 import com.me.kt_cook_book.utility.exhaustive
 import com.me.kt_cook_book.viewmodels.FavoriteRecipesViewModel
-import com.me.kt_cook_book.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,6 +42,8 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
         readDatabase()
         getFavoriteRecipesEvents()
 
+        onFavoriteRecipeSwipe()
+
         setHasOptionsMenu(true)
     }
 
@@ -50,6 +53,24 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
+
+    private fun onFavoriteRecipeSwipe() = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.absoluteAdapterPosition
+            val recipeId = recipesAdapter.getCurrentRecipeId(position)
+            favoritesViewModel.onDeleteFavoriteRecipe(recipeId)
+        }
+
+    }).attachToRecyclerView(binding.favoriteRecipesRecyclerView)
 
     private fun readDatabase() = favoritesViewModel.favoriteRecipes.observe(viewLifecycleOwner){ databaseList ->
         val results = databaseList.map { it.result }
@@ -63,21 +84,24 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
                     val action = FavoriteRecipesFragmentDirections.actionFavoriteRecipesFragmentToDetailsFragment(event.result, event.isFavorite)
                     findNavController().navigate(action)
                 }
-                is FavoriteRecipesViewModel.FavoriteRecipesEvent.ShowSnackbar -> {
-//                    Snackbar.make(
-//                        requireView(),
-//                        event.message,
-//                        Snackbar.LENGTH_LONG
-//                    ).setAction("UNDO"){
-//
-//                    }.show()
-                }
-                is FavoriteRecipesViewModel.FavoriteRecipesEvent.ShowToast -> {
-                    Toast.makeText(requireContext(), event.message, Toast.LENGTH_LONG).show()
+                is FavoriteRecipesViewModel.FavoriteRecipesEvent.DeleteSnackbar -> {
+                    showSnackbar(event.message, event.deleteType, event.deletedFavoriteRecipes)
                 }
             }.exhaustive
         }
     }
+
+    private fun showSnackbar(
+        message: String,
+        deleteType: DeleteType,
+        deletedRecipes: List<FavoritesEntity>
+    ) = Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
+        .setAction("UNDO"){
+        when(deleteType){
+            DeleteType.DELETE_RECIPE -> favoritesViewModel.onUndoDeleteFavoriteRecipe(deletedRecipes.first())
+            DeleteType.DELETE_ALL_RECIPES -> favoritesViewModel.onUndoDeleteAllFavoriteRecipes(deletedRecipes)
+        }
+    }.show()
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.favorite_recipes_menu, menu)
@@ -92,7 +116,6 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
 
         return super.onOptionsItemSelected(item)
     }
-
 
     override fun onDestroy() {
         _binding = null
