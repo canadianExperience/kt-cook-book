@@ -7,8 +7,7 @@ import com.me.kt_cook_book.data.database.entities.FavoritesEntity
 import com.me.kt_cook_book.utility.DeleteType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +21,13 @@ class FavoriteRecipesViewModel @Inject constructor(
 
     private val favoriteRecipesEventChannel = Channel<FavoriteRecipesEvent>()
     val favoriteRecipesEvent = favoriteRecipesEventChannel.receiveAsFlow()
+
+    private val noFavoriteRecipesFlow = MutableStateFlow(false)
+    val noFavoriteRecipes: LiveData<Boolean> get() = noFavoriteRecipesFlow.asLiveData()
+
+   fun setNoFavoriteRecipesFlow(value: Boolean) = viewModelScope.launch {
+        noFavoriteRecipesFlow.emit(value)
+    }
 
     fun onRecipeClick(result: Result) = viewModelScope.launch {
         favoriteRecipesEventChannel.send(FavoriteRecipesEvent.NavigateToDetailsFragment(result, true))

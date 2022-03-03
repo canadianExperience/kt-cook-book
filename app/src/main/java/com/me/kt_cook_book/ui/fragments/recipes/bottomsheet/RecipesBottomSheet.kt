@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,6 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
     private var _binding: RecipesBottomSheetBinding? = null
     private val binding  get() = _binding!!
     private val recipesViewModel: RecipesViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
-    //private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireParentFragment().childFragmentManager.primaryNavigationFragment!! })
     private val mainViewModel by activityViewModels<MainViewModel>()
     private var mealTypeChip = DEFAULT_MEAL_TYPE
     private var mealTypeChipId = 0
@@ -46,8 +46,8 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
         mainViewModel.readMealAndDietType.observe(viewLifecycleOwner) { value ->
             mealTypeChip = value.selectedMealType
             dietTypeChip = value.selectedDietType
-            updateChip(value.selectedMealTypeId, binding.mealTypeChipGroup)
-            updateChip(value.selectedDietTypeId, binding.dietTypeChipGroup)
+            updateChip(value.selectedMealTypeId, binding.mealTypeChipGroup, binding.mealTypeScrollView)
+            updateChip(value.selectedDietTypeId, binding.dietTypeChipGroup, binding.dietTypeScrollView)
         }
 
         binding.mealTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -73,14 +73,24 @@ class RecipesBottomSheet : BottomSheetDialogFragment() {
                 dietTypeChipId
             )
 
-           findNavController().popBackStack()
+            findNavController().popBackStack()
         }
     }
 
-    private fun updateChip(chipId: Int, chipGroup: ChipGroup) {
+    private fun updateChip(chipId: Int, chipGroup: ChipGroup, scrollView: HorizontalScrollView) {
         if (chipId != 0) {
             try {
-                chipGroup.findViewById<Chip>(chipId).isChecked = true
+                val chip = chipGroup.findViewById<Chip>(chipId)
+                chip.isChecked = true
+
+                if(chip.isChecked) {
+                    scrollView.post(Runnable {
+                        scrollView.scrollTo(
+                            chip.left - chip.paddingLeft,
+                            chip.top
+                        )
+                    })
+                }
             } catch (e: Exception) {
                 Log.d("RecipesBottomSheet", e.message.toString())
             }

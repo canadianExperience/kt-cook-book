@@ -18,10 +18,12 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lightGray">
+        android:background="@color/lightGray"
+        app:layoutDescription="@xml/overview_motion_scene">
 
         <ImageView
             android:id="@+id/main_imageView"
@@ -84,7 +86,7 @@
             android:id="@+id/likes_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_favorite"
+            android:src="@drawable/ic_thumb_up"
             app:layout_constraintBottom_toTopOf="@+id/likes_textView"
             app:layout_constraintEnd_toEndOf="@+id/likes_textView"
             app:layout_constraintStart_toStartOf="@+id/likes_textView"
@@ -108,128 +110,128 @@
 
         <ImageView
             android:id="@+id/vegetarian_imageView"
-            app:checkmarkColor="@{result.vegetarian}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.vegetarian}"
             app:layout_constraintStart_toStartOf="@+id/title_textView"
             app:layout_constraintTop_toBottomOf="@+id/title_textView" />
 
         <TextView
             android:id="@+id/vegetarian_textView"
-            app:checkmarkColor="@{result.vegetarian}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/vegetarian"
+            app:checkmarkColor="@{result.vegetarian}"
             app:layout_constraintBottom_toBottomOf="@+id/vegetarian_imageView"
             app:layout_constraintStart_toEndOf="@+id/vegetarian_imageView"
             app:layout_constraintTop_toTopOf="@+id/vegetarian_imageView" />
 
         <ImageView
             android:id="@+id/vegan_imageView"
-            app:checkmarkColor="@{result.vegan}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.vegan}"
             app:layout_constraintStart_toStartOf="@+id/vegetarian_imageView"
             app:layout_constraintTop_toBottomOf="@+id/vegetarian_imageView" />
 
         <TextView
             android:id="@+id/vegan_textView"
-            app:checkmarkColor="@{result.vegan}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/vegan"
+            app:checkmarkColor="@{result.vegan}"
             app:layout_constraintBottom_toBottomOf="@+id/vegan_imageView"
             app:layout_constraintStart_toEndOf="@+id/vegan_imageView"
             app:layout_constraintTop_toTopOf="@+id/vegan_imageView" />
 
         <ImageView
             android:id="@+id/gluten_free_imageView"
-            app:checkmarkColor="@{result.glutenFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.glutenFree}"
             app:layout_constraintBottom_toBottomOf="@+id/vegetarian_textView"
             app:layout_constraintStart_toEndOf="@+id/vegetarian_textView"
             app:layout_constraintTop_toTopOf="@+id/vegetarian_textView" />
 
         <TextView
             android:id="@+id/gluten_free_textView"
-            app:checkmarkColor="@{result.glutenFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/gluten_free"
+            app:checkmarkColor="@{result.glutenFree}"
             app:layout_constraintBottom_toBottomOf="@+id/gluten_free_imageView"
             app:layout_constraintStart_toEndOf="@+id/gluten_free_imageView"
             app:layout_constraintTop_toTopOf="@+id/gluten_free_imageView" />
 
         <ImageView
             android:id="@+id/dairy_free_imageView"
-            app:checkmarkColor="@{result.dairyFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.dairyFree}"
             app:layout_constraintStart_toStartOf="@+id/gluten_free_imageView"
             app:layout_constraintTop_toBottomOf="@+id/gluten_free_imageView" />
 
         <TextView
             android:id="@+id/dairy_free_textView"
-            app:checkmarkColor="@{result.dairyFree}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/dairy_free"
+            app:checkmarkColor="@{result.dairyFree}"
             app:layout_constraintBottom_toBottomOf="@+id/dairy_free_imageView"
             app:layout_constraintStart_toEndOf="@+id/dairy_free_imageView"
             app:layout_constraintTop_toTopOf="@+id/dairy_free_imageView" />
 
         <ImageView
             android:id="@+id/healthy_imageView"
-            app:checkmarkColor="@{result.veryHealthy}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.veryHealthy}"
             app:layout_constraintBottom_toBottomOf="@+id/gluten_free_textView"
             app:layout_constraintStart_toEndOf="@+id/gluten_free_textView"
             app:layout_constraintTop_toTopOf="@+id/gluten_free_textView" />
 
         <TextView
             android:id="@+id/healthy_textView"
-            app:checkmarkColor="@{result.veryHealthy}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/healthy"
+            app:checkmarkColor="@{result.veryHealthy}"
             app:layout_constraintBottom_toBottomOf="@+id/healthy_imageView"
             app:layout_constraintStart_toEndOf="@+id/healthy_imageView"
             app:layout_constraintTop_toTopOf="@+id/healthy_imageView" />
 
         <ImageView
             android:id="@+id/cheap_imageView"
-            app:checkmarkColor="@{result.cheap}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:src="@drawable/ic_checkmark"
+            app:checkmarkColor="@{result.cheap}"
             app:layout_constraintStart_toStartOf="@+id/healthy_imageView"
             app:layout_constraintTop_toBottomOf="@+id/healthy_imageView" />
 
         <TextView
             android:id="@+id/cheap_textView"
-            app:checkmarkColor="@{result.cheap}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/cheap"
+            app:checkmarkColor="@{result.cheap}"
             app:layout_constraintBottom_toBottomOf="@+id/cheap_imageView"
             app:layout_constraintStart_toEndOf="@+id/cheap_imageView"
             app:layout_constraintTop_toTopOf="@+id/cheap_imageView" />
@@ -253,12 +255,12 @@
 
                 <TextView
                     android:id="@+id/summary_textView"
+                    parseHtml="@{result.summary}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    parseHtml="@{result.summary}"
                     android:textSize="16sp" />
             </LinearLayout>
         </ScrollView>
         <!--</androidx.constraintlayout.motion.widget.MotionLayout>-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

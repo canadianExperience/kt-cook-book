@@ -38,6 +38,9 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
 
         _binding = FragmentFavoriteRecipesBinding.bind(view)
 
+        binding.favoritesViewModel = favoritesViewModel
+        binding.lifecycleOwner = this
+
         setupRecyclerView()
         readDatabase()
         getFavoriteRecipesEvents()
@@ -75,6 +78,7 @@ class FavoriteRecipesFragment : Fragment(R.layout.fragment_favorite_recipes),
     private fun readDatabase() = favoritesViewModel.favoriteRecipes.observe(viewLifecycleOwner){ databaseList ->
         val results = databaseList.map { it.result }
         recipesAdapter.setData(results)
+        favoritesViewModel.setNoFavoriteRecipesFlow(!results.isNullOrEmpty())
     }
 
     private fun getFavoriteRecipesEvents() = lifecycleScope.launch {

@@ -85,14 +85,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         inflater.inflate(R.menu.details_menu, menu)
 
         val menuItem = menu.findItem(R.id.save_to_favorites_menu)
-        changeMenuItemColor(menuItem)
+        changeMenuItemIcon(menuItem)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.save_to_favorites_menu -> {
                 detailsViewModel.onFavoritesClick()
-                changeMenuItemColor(item)
+                changeMenuItemIcon(item)
             }
 
             android.R.id.home -> onBackBtnAction()
@@ -111,9 +111,9 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    private fun changeMenuItemColor(item: MenuItem){
-        val color = if(detailsViewModel.isFavorite) R.color.yellow else R.color.white
-        item.icon.setTint(ContextCompat.getColor(requireContext(), color))
+    private fun changeMenuItemIcon(item: MenuItem){
+        val icon = if(detailsViewModel.isFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+        item.setIcon(icon)
     }
 
     override fun onDestroy() {
