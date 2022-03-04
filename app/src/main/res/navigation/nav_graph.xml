@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/recipesFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/recipesFragment"
         android:name="com.me.kt_cook_book.ui.fragments.recipes.RecipesFragment"
@@ -43,5 +43,17 @@
         <argument
             android:name="isFavorite"
             app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.me.kt_cook_book.ui.fragments.splash.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_recipesFragment"
+            app:destination="@id/recipesFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

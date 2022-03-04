@@ -1,10 +1,9 @@
 package com.me.kt_cook_book.ui.fragments.recipes
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
+import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
@@ -19,6 +18,7 @@ import com.me.kt_cook_book.R
 import com.me.kt_cook_book.data.apimanager.NetworkResult
 import com.me.kt_cook_book.data.apimanager.models.Result
 import com.me.kt_cook_book.databinding.FragmentRecipesBinding
+import com.me.kt_cook_book.ui.MainActivity
 import com.me.kt_cook_book.ui.adapters.IRecipeClickListener
 import com.me.kt_cook_book.ui.adapters.RecipesAdapter
 import com.me.kt_cook_book.utility.NetworkListener
@@ -50,6 +50,19 @@ IRecipeClickListener{
         binding.mainViewModel = mainViewModel
         binding.recipesViewModel = recipesViewModel
         binding.lifecycleOwner = this
+
+        mainViewModel.setDisplayBottomNavFlow(true)
+
+        (requireActivity() as MainActivity).apply {
+            supportActionBar?.show()
+            actionBar?.show()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            (requireActivity() as MainActivity).window.insetsController?.apply {
+                show(WindowInsets.Type.statusBars())
+                show(WindowInsets.Type.navigationBars())
+            }
+        }
 
         setupRecyclerView()
 

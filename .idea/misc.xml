@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/drawable/splash_screen.xml" value="0.189" />
         <entry key="app/src/main/res/font/courgette.xml" value="0.3574074074074074" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16185410334346503" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.276268115942029" />
         <entry key="app/src/main/res/layout/favorite_recipes_row_layout.xml" value="0.17872340425531916" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_favorite_recipes.xml" value="0.25" />
@@ -21,10 +22,11 @@
         <entry key="app/src/main/res/layout/fragment_instructions.xml" value="0.17980072463768115" />
         <entry key="app/src/main/res/layout/fragment_overview.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_recipes.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.1" />
         <entry key="app/src/main/res/layout/ingredients_row_layout.xml" value="0.1" />
         <entry key="app/src/main/res/layout/placeholder_row_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/recipes_bottom_sheet.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/recipes_row_layout.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/recipes_row_layout.xml" value="0.375" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/details_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/favorite_recipes_menu.xml" value="0.1" />
