@@ -1,5 +1,5 @@
 # Cook Book
-Hilt, MVVM, Room DB, Navigation, Coil, Data Binding, Preferences DataStore, Flow, Event Listener, Api
+Hilt, MVVM, Room DB, Navigation, Preferences DataStore, Flow, Event Listener, Api, Coil, Shimmer, Data Binding
 
 Add Api key from: https://spoonacular.com/
 into local.properties SPOONACULAR_API_KEY="key"
@@ -13,6 +13,6 @@ Sample API request: https://api.spoonacular.com/recipes/complexSearch?number=1&a
 
 
 ## Demo screens
+![cook-book-screens](https://user-images.githubusercontent.com/45378000/157114687-ec9ca42c-c323-4eee-888c-07bf1aaead4c.png)
 
 
-![cook-bool-screens-min](https://user-images.githubusercontent.com/45378000/157111689-7d53f27d-7186-4707-9070-4fcd775e19db.png)
