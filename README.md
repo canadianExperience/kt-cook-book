@@ -7,8 +7,6 @@ into local.properties SPOONACULAR_API_KEY="key"
 Install "JSON to Kotlin Class" plugin
 Sample API request: https://api.spoonacular.com/recipes/complexSearch?number=1&apiKey=SPOONACULAR_API_KEY&type=drink&diet=vegan&addRecipeInformation=true&fillIngredients=true
 
-Food joke API request: https://api.spoonacular.com/food/jokes/random?apiKey=SPOONACULAR_API_KEY
-
 ## Author
 
 - [@elenamelnikova](https://github.com/canadianExperience)
