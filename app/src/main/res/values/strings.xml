@@ -41,4 +41,9 @@
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </string>
     <string name="share">Share</string>
+    <string name="app_icon_attr">
+        <a href="https://www.flaticon.com/free-icons/cooking"
+            title="cooking icons">Cooking icons created by Freepik - Flaticon
+        </a>
+    </string>
 </resources>

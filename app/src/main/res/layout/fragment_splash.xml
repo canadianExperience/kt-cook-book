@@ -14,14 +14,14 @@
         android:adjustViewBounds="true"
         android:padding="32dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/chef_white"
+        android:src="@drawable/cook_chef"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_marginTop="32dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/courgette"

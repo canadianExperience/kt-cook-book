@@ -2,6 +2,7 @@ package com.me.kt_cook_book.viewmodels
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.view.View
 import androidx.lifecycle.*
 import com.me.kt_cook_book.data.Repository
 import com.me.kt_cook_book.data.apimanager.models.FoodRecipe
@@ -49,6 +50,16 @@ class MainViewModel @Inject constructor(
 
     private var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
     val recipesResponseLiveData: LiveData<NetworkResult<FoodRecipe>> get() = recipesResponse
+
+
+    private val displayErrorIconFlow: Flow<Boolean> = combine(
+        readRecipes.asFlow(),
+        recipesResponseLiveData.asFlow()
+    ){recipes, response ->
+        response is NetworkResult.Error && recipes.isNullOrEmpty()
+    }
+    val displayErrorIcon: LiveData<Boolean> get() = displayErrorIconFlow.asLiveData()
+
 
     private fun mealAndDietTypeQueries(meal: String, diet: String):HashMap<String,String>{
         val queries: HashMap<String, String> = HashMap()

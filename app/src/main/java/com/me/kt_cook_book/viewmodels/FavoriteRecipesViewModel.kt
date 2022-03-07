@@ -22,12 +22,8 @@ class FavoriteRecipesViewModel @Inject constructor(
     private val favoriteRecipesEventChannel = Channel<FavoriteRecipesEvent>()
     val favoriteRecipesEvent = favoriteRecipesEventChannel.receiveAsFlow()
 
-    private val noFavoriteRecipesFlow = MutableStateFlow(false)
+    private val noFavoriteRecipesFlow: Flow<Boolean> = favoriteRecipes.asFlow().map { !it.isNullOrEmpty() }
     val noFavoriteRecipes: LiveData<Boolean> get() = noFavoriteRecipesFlow.asLiveData()
-
-   fun setNoFavoriteRecipesFlow(value: Boolean) = viewModelScope.launch {
-        noFavoriteRecipesFlow.emit(value)
-    }
 
     fun onRecipeClick(result: Result) = viewModelScope.launch {
         favoriteRecipesEventChannel.send(FavoriteRecipesEvent.NavigateToDetailsFragment(result, true))
@@ -39,8 +35,7 @@ class FavoriteRecipesViewModel @Inject constructor(
         favoriteRecipesEventChannel.send(FavoriteRecipesEvent.DeleteSnackbar(
             "All favorite recipes deleted",
             deletedFavoriteRecipesList,
-            DeleteType.DELETE_ALL_RECIPES
-        )
+            DeleteType.DELETE_ALL_RECIPES)
         )
     }
 

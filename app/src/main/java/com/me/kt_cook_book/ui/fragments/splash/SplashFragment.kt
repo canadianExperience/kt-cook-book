@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -14,9 +13,6 @@ import com.me.kt_cook_book.R
 import com.me.kt_cook_book.databinding.FragmentSplashBinding
 import com.me.kt_cook_book.ui.MainActivity
 import com.me.kt_cook_book.viewmodels.MainViewModel
-
-
-
 
 class SplashFragment : Fragment(R.layout.fragment_splash){
     private var _binding: FragmentSplashBinding? = null

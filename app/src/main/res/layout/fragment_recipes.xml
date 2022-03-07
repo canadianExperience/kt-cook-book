@@ -24,13 +24,11 @@
 
         <ImageView
             android:id="@+id/error_imageView"
-            app:readApiResponse="@{mainViewModel.recipesResponseLiveData}"
-            app:readDatabase="@{mainViewModel.readRecipes}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:alpha="0.5"
             android:src="@drawable/ic_sad"
-            android:visibility="invisible"
+            android:visibility="@{mainViewModel.displayErrorIcon ? View.VISIBLE: View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +36,6 @@
 
         <TextView
             android:id="@+id/textView"
-            app:readApiResponse2="@{mainViewModel.recipesResponseLiveData}"
-            app:readDatabase2="@{mainViewModel.readRecipes}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -47,7 +43,8 @@
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="invisible"
+            android:text="@{mainViewModel.recipesResponseLiveData.message.toString()}"
+            android:visibility="@{mainViewModel.displayErrorIcon ? View.VISIBLE: View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/error_imageView" />
@@ -101,6 +98,7 @@
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_add_recipe"
+            app:backgroundTint="@color/purple_200"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
