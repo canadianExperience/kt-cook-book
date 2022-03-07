@@ -12,7 +12,7 @@ Sample API request: https://api.spoonacular.com/recipes/complexSearch?number=1&a
 - [@elenamelnikova](https://github.com/canadianExperience)
 
 
-## Screens demo
+## Screens Demo
 ![cook-book-screens](https://user-images.githubusercontent.com/45378000/157114687-ec9ca42c-c323-4eee-888c-07bf1aaead4c.png)
 
 
