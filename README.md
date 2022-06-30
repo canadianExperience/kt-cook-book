@@ -1,5 +1,15 @@
 # Cook Book
-Hilt, MVVM, Room DB, Navigation, Preferences DataStore, Flow, Event Listener, Api, Coil, Shimmer, Data Binding
+- Hilt
+- MVVM
+- Room DB
+- Navigation Graph
+- Preferences DataStore
+- Flow
+- Event Listener
+- REST API
+- Coil
+- Shimmer
+- Data Binding
 
 Add Api key from: https://spoonacular.com/
 into local.properties SPOONACULAR_API_KEY="key"
